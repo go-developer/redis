@@ -42,10 +42,16 @@
 /* Unused arguments generate annoying warnings... */
 #define DICT_NOTUSED(V) ((void) V)
 
+/*
+ * 字典的数据结构一个节点的实体
+ * 整理 : 张德满
+ * 邮箱 : go_developer@163.com
+ * QQ : 2215508028
+ */
 typedef struct dictEntry {
-    void *key;
-    void *val;
-    struct dictEntry *next;
+    void *key;              //节点key
+    void *val;              //节点val
+    struct dictEntry *next; //只想下一个节点的指针
 } dictEntry;
 
 typedef struct dictType {
@@ -103,6 +109,7 @@ typedef struct dictIterator {
         (ht)->type->keyCompare((ht)->privdata, key1, key2) : \
         (key1) == (key2))
 
+//使用字典设置的哈希函数，计算键 key 的哈希值
 #define dictHashKey(ht, key) (ht)->type->hashFunction(key)
 
 #define dictGetEntryKey(he) ((he)->key)
@@ -112,12 +119,18 @@ typedef struct dictIterator {
 
 /* API */
 static unsigned int dictGenHashFunction(const unsigned char *buf, int len);
+//创建一个新的字典
 static dict *dictCreate(dictType *type, void *privDataPtr);
 static int dictExpand(dict *ht, unsigned long size);
+//将指定的键值对添加到字典里
 static int dictAdd(dict *ht, void *key, void *val);
+//将给定的键值对添加到字典里面， 如果键已经存在于字典，那么用新值取代原有的值。
 static int dictReplace(dict *ht, void *key, void *val);
+//从字典中删除给定键所对应的键值对。
 static int dictDelete(dict *ht, const void *key);
+//释放给定字典，以及字典中包含的所有键值对。
 static void dictRelease(dict *ht);
+//返回指定的key的值
 static dictEntry * dictFind(dict *ht, const void *key);
 static dictIterator *dictGetIterator(dict *ht);
 static dictEntry *dictNext(dictIterator *iter);
